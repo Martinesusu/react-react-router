@@ -1,10 +1,37 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const [products, setProducts] = useState([]);
   const [isError, setIsError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleView = (id) => {
+    navigate(`/product/${id}`);
+  }
+
+  const handleCreate = () => {
+    navigate("/product/create")
+  }
+
+  const handleEdit = (id) => {
+    navigate(`/product/${id}/edit`);
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4001/products/${id}`);
+      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+      alert("Product deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Failed to delete product.");
+    }
+  };
+  
 
   const getProducts = async () => {
     try {
@@ -21,11 +48,12 @@ function HomePage() {
   useEffect(() => {
     getProducts();
   }, []);
+  
   return (
     <div>
       <div className="app-wrapper">
         <h1 className="app-title">Products</h1>
-        <button>Create Product</button>
+        <button onClick={() => handleCreate()}>Create Product</button>
       </div>
       <div className="product-list">
         {products.map((product) => {
@@ -33,7 +61,7 @@ function HomePage() {
             <div className="product">
               <div className="product-preview">
                 <img
-                  src="https://via.placeholder.com/250/250"
+                  src={product.image}
                   alt="some product"
                   width="250"
                   height="250"
@@ -44,12 +72,12 @@ function HomePage() {
                 <h2>Product price: {product.price}</h2>
                 <p>Product description: {product.description} </p>
                 <div className="product-actions">
-                  <button className="view-button">View</button>
-                  <button className="edit-button">Edit</button>
+                  <button className="view-button" onClick={() => handleView(product.id)}>View</button>
+                  <button className="edit-button" onClick={() => handleEdit(product.id)}>Edit</button>
                 </div>
               </div>
 
-              <button className="delete-button">x</button>
+              <button className="delete-button" onClick={() => handleDelete(product.id)}>x</button>
             </div>
           );
         })}

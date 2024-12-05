@@ -47,6 +47,19 @@ body {
   background-color: var(--highlight-color);
   padding: 20px;
   border-radius: 15px;
+  max-width: 850px;
+}
+
+.view-product-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 100px;
+}
+.view-product-container .view-product-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 
 .product .product-detail {
@@ -170,6 +183,14 @@ form h1 {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: end;
 }
 
 /* general elements */
